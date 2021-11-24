@@ -3,8 +3,8 @@ import {
   RenderPosition
 } from './utils/render.js';
 import {
-  createUserProfileTemplate
-} from './view/user-profile-view.js';
+  createUserRankTemplate
+} from './view/user-rank-view.js';
 import {
   createMenuContainerTemplate
 } from './view/menu-container-view.js';
@@ -36,8 +36,8 @@ import {
   createButtonShowMore
 } from './view/button-show-more-view.js';
 import {
-  createFooterTemplate
-} from './view/footer-view.js';
+  createFooterStatisticsTemplate
+} from './view/footer-statistics-view.js';
 import {
   createStatsTemplate
 } from './view/menu-stats-view.js';
@@ -48,8 +48,10 @@ const TOP_RATED = 'Top rated';
 
 const headerElement = document.querySelector('.header');
 const mainElement = document.querySelector('.main');
+const footerStatisticsElement = document.querySelector('.footer__statistics');
 
-renderTemplate(headerElement, createUserProfileTemplate(), RenderPosition.BEFOREEND);
+
+renderTemplate(headerElement, createUserRankTemplate(), RenderPosition.BEFOREEND);
 renderTemplate(mainElement, createMenuContainerTemplate(), RenderPosition.AFTERBEGIN);
 
 const navigationContainerElement = mainElement.querySelector('.main-navigation');
@@ -81,15 +83,17 @@ for (let i = 0; i < FILM_COUNT; i++) {
 renderTemplate(filmsListElement, createButtonShowMore(), RenderPosition.BEFOREEND);
 
 renderTemplate(filmsBoardElement, createFilmExtraContainerTemplate(TOP_RATED), RenderPosition.BEFOREEND);
-
-
-const filmExtraListElement = filmsBoardElement.querySelector('.films-list--extra');
-
-renderTemplate(filmExtraListElement, createFilmContainerTemplate(), RenderPosition.BEFOREEND);
-
 renderTemplate(filmsBoardElement, createFilmExtraContainerTemplate(MOST_COMMENTED), RenderPosition.BEFOREEND);
 
-for (let i = 0; i < FILM_EXTRA_COUNT; i++)  {
 
-}
+const filmExtraListElement = filmsBoardElement.querySelectorAll('.films-list--extra');
+
+filmExtraListElement.forEach( (element) => {
+  renderTemplate(element, createFilmContainerTemplate(), RenderPosition.BEFOREEND);
+  for (let i = 0; i < FILM_EXTRA_COUNT; i++)  {
+    renderTemplate((element.querySelector('.films-list__container')),createFilmCardtemplate(), RenderPosition.BEFOREEND);
+  }
+});
+
+renderTemplate(footerStatisticsElement, createFooterStatisticsTemplate(), RenderPosition.BEFOREEND);
 
