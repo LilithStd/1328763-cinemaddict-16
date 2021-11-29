@@ -48,8 +48,8 @@ import {
   generateFilmCardMock
 } from './mock/film-card-mock.js';
 import {
-  generateFilterMock
-} from './mock/film-filter-mock.js';
+  generateFilters
+} from './utils/film-filters.js';
 
 const FILM_COUNT = 20;
 const FILM_EXTRA_COUNT = 2;
@@ -61,7 +61,7 @@ const films = Array.from({
   length: FILM_COUNT
 }, generateFilmCardMock);
 
-const filters = generateFilterMock(films);
+const filters = generateFilters(films);
 
 const headerElement = document.querySelector('.header');
 const mainElement = document.querySelector('.main');
@@ -115,8 +115,8 @@ const filmTopRatedElement = contentExtraElement[0];
 const filmMostCommentedElement = contentExtraElement[1];
 
 for (let i = 0; i < FILM_EXTRA_COUNT; i++) {
-  renderTemplate(filmTopRatedElement, createFilmCardtemplate(topRatedResult[i]), 'beforeend');
-  renderTemplate(filmMostCommentedElement, createFilmCardtemplate(mostCommentedResult[i]), 'beforeend');
+  renderTemplate(filmTopRatedElement, createFilmCardtemplate(topRatedResult[i]), RenderPosition.BEFOREEND);
+  renderTemplate(filmMostCommentedElement, createFilmCardtemplate(mostCommentedResult[i]), RenderPosition.BEFOREEND);
 }
 
 renderTemplate(footerStatisticsElement, createFooterStatisticsTemplate(films), RenderPosition.BEFOREEND);
