@@ -1,46 +1,29 @@
 import {
   renderTemplate,
-  RenderPosition
+  RenderPosition,
+  renderElement
 } from './utils/render.js';
-import {
-  createUserRankTemplate
-} from './view/user-rank-view.js';
-import {
-  createMenuContainerTemplate
-} from './view/menu-container-view.js';
-import {
-  createMenuListTemplate
-} from './view/menu-list-view.js';
+import UserRankView from './view/user-rank-view.js';
+import MenuContainerView from './view/menu-container-view.js';
+import MenuListView from './view/menu-list-view.js';
 import {
   createMenuItemTemplate
 } from './view/menu-item-view.js';
-import {
-  createSortTemplate
-} from './view/sort-view.js';
-import {
-  createFilmsBoardTemplate
-} from './view/films-board-view.js';
-import {
-  createFilmListTemplate
-} from './view/film-list-view.js';
-import {
-  createFilmContainerTemplate
-} from './view/film-container-view.js';
+import SortView from './view/sort-view.js';
+import FilmsBoardView from './view/films-board-view.js';
+import FilmListView from './view/film-list-view.js';
+import FilmContainerView from './view/film-container-view.js';
 import {
   createFilmExtraContainerTemplate
 } from './view/film-extra-container-view.js';
 import {
   createFilmCardtemplate
 } from './view/film-card-view.js';
-import {
-  createButtonShowMore
-} from './view/button-show-more-view.js';
+import ButtonShowMoreView from './view/button-show-more-view.js';
 import {
   createFooterStatisticsTemplate
 } from './view/footer-statistics-view.js';
-import {
-  createStatsTemplate
-} from './view/menu-stats-view.js';
+import MenuStatsView from './view/menu-stats-view.js';
 import {
   createFilmPopupInfoTemplate
 } from './view/film-popup-info-view.js';
@@ -69,28 +52,28 @@ const footerStatisticsElement = document.querySelector('.footer__statistics');
 const bodyElement = document.querySelector('body');
 
 
-renderTemplate(headerElement, createUserRankTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(mainElement, createMenuContainerTemplate(), RenderPosition.AFTERBEGIN);
+renderElement(headerElement, new UserRankView().element, RenderPosition.BEFOREEND);
+renderElement(mainElement, new MenuContainerView().element, RenderPosition.AFTERBEGIN);
 
 const navigationContainerElement = mainElement.querySelector('.main-navigation');
 
-renderTemplate(navigationContainerElement, createMenuListTemplate(), RenderPosition.BEFOREEND);
+renderElement(navigationContainerElement, new MenuListView().element, RenderPosition.BEFOREEND);
 
 const navigationListElement = navigationContainerElement.querySelector('.main-navigation__items');
 
 renderTemplate(navigationListElement, createMenuItemTemplate(filters), RenderPosition.BEFOREEND);
-renderTemplate(navigationContainerElement, createStatsTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(mainElement, createSortTemplate(), RenderPosition.BEFOREEND);
+renderElement(navigationContainerElement, new MenuStatsView().element, RenderPosition.BEFOREEND);
+renderElement(mainElement, new SortView().element, RenderPosition.BEFOREEND);
 
-renderTemplate(mainElement, createFilmsBoardTemplate(), RenderPosition.BEFOREEND);
+renderElement(mainElement, new FilmsBoardView().element, RenderPosition.BEFOREEND);
 
 const filmsBoardElement = mainElement.querySelector('.films');
 
-renderTemplate(filmsBoardElement, createFilmListTemplate(), RenderPosition.BEFOREEND);
+renderElement(filmsBoardElement, new FilmListView().element, RenderPosition.BEFOREEND);
 
 const filmsListElement = filmsBoardElement.querySelector('.films-list');
 
-renderTemplate(filmsListElement, createFilmContainerTemplate(), RenderPosition.BEFOREEND);
+renderElement(filmsListElement, new FilmContainerView().element, RenderPosition.BEFOREEND);
 
 const filmsListContainerElement = filmsListElement.querySelector('.films-list__container');
 
@@ -107,7 +90,7 @@ renderTemplate(filmsBoardElement, createFilmExtraContainerTemplate(MOST_COMMENTE
 
 const filmExtraListElement = filmsBoardElement.querySelectorAll('.films-list--extra');
 filmExtraListElement.forEach((element) => {
-  renderTemplate(element, createFilmContainerTemplate(), RenderPosition.BEFOREEND);
+  renderElement(element, new FilmContainerView().element, RenderPosition.BEFOREEND);
 });
 
 const contentExtraElement = mainElement.querySelectorAll('.films-list--extra .films-list__container');
@@ -122,10 +105,11 @@ for (let i = 0; i < FILM_EXTRA_COUNT; i++) {
 renderTemplate(footerStatisticsElement, createFooterStatisticsTemplate(films), RenderPosition.BEFOREEND);
 
 renderTemplate(bodyElement, createFilmPopupInfoTemplate(films[0]), RenderPosition.BEFOREEND);
+
 if (films.length > FILM_COUNT_PER_STEP) {
   let renderedFilmCount = FILM_COUNT_PER_STEP;
 
-  renderTemplate(filmsListElement, createButtonShowMore(), RenderPosition.BEFOREEND);
+  renderElement(filmsListElement, new ButtonShowMoreView().element, RenderPosition.BEFOREEND);
 
   const loadMoreButton = filmsListElement.querySelector('.films-list__show-more');
 

@@ -57,6 +57,7 @@ export const createFilmPopupInfoTemplate = (film) => {
     </li>`;
       commentsList += ` ${commentsItem}`;
     });
+
     return commentsList;
   };
   const classControlPopup = 'film-details__control-button--active';
