@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {nanoid} from 'nanoid';
 import {
   EMOJI
 } from '../const.js';
@@ -147,6 +148,8 @@ const generateComments = () => {
     'John Doe',
   ];
   const commentsUsers = () => ({
+    //генерация id коммента
+    idComment: nanoid(),
     textComment: COMMENTS[getRandomInteger(0, COMMENTS.length - 1)],
     emojiComment: EMOJI[getRandomInteger(0, EMOJI.length - 1)],
     authorComment: NAMES_AUTHORS[getRandomInteger(0, NAMES_AUTHORS.length - 1)],

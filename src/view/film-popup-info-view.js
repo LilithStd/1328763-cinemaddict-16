@@ -1,9 +1,12 @@
 import {
   addFilmStatusControls
 } from '../utils/film-status-control.js';
+import {
+  createElement
+} from '../utils/render.js';
 
 
-export const createFilmPopupInfoTemplate = (film) => {
+const createFilmPopupInfoTemplate = (film) => {
   const {
     title,
     poster,
@@ -24,7 +27,7 @@ export const createFilmPopupInfoTemplate = (film) => {
   } = film;
 
   const checkCountGenre = () => {
-    if(genre.length > 1)  {
+    if (genre.length > 1) {
       return 'Genres';
     }
     return 'Genre';
@@ -57,6 +60,7 @@ export const createFilmPopupInfoTemplate = (film) => {
     </li>`;
       commentsList += ` ${commentsItem}`;
     });
+
     return commentsList;
   };
   const classControlPopup = 'film-details__control-button--active';
@@ -176,3 +180,27 @@ export const createFilmPopupInfoTemplate = (film) => {
 </section>
   `;
 };
+export default class FilmPopupInfoView {
+  #element = null;
+  #film = null;
+
+  constructor(film) {
+    this.#film = film;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createFilmPopupInfoTemplate(this.#film);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

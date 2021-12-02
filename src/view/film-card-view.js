@@ -2,7 +2,11 @@
 import {
   addFilmStatusControls
 } from '../utils/film-status-control.js';
-export const createFilmCardtemplate = (film) => {
+import {
+  createElement
+} from '../utils/render.js';
+
+const createFilmCardtemplate = (film) => {
   const {
     title,
     poster,
@@ -45,3 +49,27 @@ export const createFilmCardtemplate = (film) => {
 </article>`;
 
 };
+export default class FilmCardView {
+  #element = null;
+  #film = null;
+
+  constructor(film) {
+    this.#film = film;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createFilmCardtemplate(this.#film);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}
