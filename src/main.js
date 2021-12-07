@@ -18,7 +18,7 @@ import MenuStatsView from './view/menu-stats-view.js';
 import FilmListEmptyView from './view/film-list-empty-view.js';
 import FilmPopupInfoView from './view/film-popup-info-view.js';
 import {
-  generateFilmCardMock
+  generateFilmModelMock
 } from './mock/film-card-mock.js';
 import {
   generateFilters
@@ -30,10 +30,12 @@ const FILM_COUNT_PER_STEP = 5;
 const MOST_COMMENTED = 'Most commented';
 const TOP_RATED = 'Top rated';
 
+// const films = Array.from({
+//   length: FILM_COUNT
+// }, generateFilmCardMock);
 const films = Array.from({
   length: FILM_COUNT
-}, generateFilmCardMock);
-
+}, generateFilmModelMock);
 const filters = generateFilters(films);
 
 const headerElement = document.querySelector('.header');
@@ -127,7 +129,7 @@ if (films.length === 0) {
 
   const filmTopRatedContainer = topRatedElement.element.querySelector('.films-list--extra .films-list__container');
   const filmMostCommentedContainer = mostCommentedElement.element.querySelector('.films-list--extra .films-list__container');
-  const topRatedResult = films.slice().sort((a, b) => b.rating - a.rating);
+  const topRatedResult = films.slice().sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
   const mostCommentedResult = films.slice().sort((a, b) => b.comments.length - a.comments.length);
 
   for (let i = 0; i < FILM_EXTRA_COUNT; i++) {

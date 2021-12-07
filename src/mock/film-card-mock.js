@@ -69,15 +69,29 @@ const generateDirector = () => {
   return DIRECTORS[randomPoster];
 };
 
+// const generatePoster = () => {
+//   const POSTERS = [
+//     'made-for-each-other.png',
+//     'popeye-meets-sinbad.png',
+//     'sagebrush-trail.jpg',
+//     'santa-claus-conquers-the-martians.jpg',
+//     'the-dance-of-life.jpg',
+//     'the-great-flamarion.jpg',
+//     'the-man-with-the-golden-arm.jpg',
+//   ];
+//   const randomPoster = getRandomInteger(0, POSTERS.length - 1);
+
+//   return POSTERS[randomPoster];
+// };
 const generatePoster = () => {
   const POSTERS = [
-    'made-for-each-other.png',
-    'popeye-meets-sinbad.png',
-    'sagebrush-trail.jpg',
-    'santa-claus-conquers-the-martians.jpg',
-    'the-dance-of-life.jpg',
-    'the-great-flamarion.jpg',
-    'the-man-with-the-golden-arm.jpg',
+    'images/posters/made-for-each-other.png',
+    'images/posters/popeye-meets-sinbad.png',
+    'images/posters/sagebrush-trail.jpg',
+    'images/posters/santa-claus-conquers-the-martians.jpg',
+    'images/posters/the-dance-of-life.jpg',
+    'images/posters/the-great-flamarion.jpg',
+    'images/posters/the-man-with-the-golden-arm.jpg',
   ];
   const randomPoster = getRandomInteger(0, POSTERS.length - 1);
 
@@ -147,17 +161,24 @@ const generateComments = () => {
     'Tim Macoveev',
     'John Doe',
   ];
-  const commentsUsers = () => ({
-    //генерация id коммента
-    idComment: nanoid(),
-    textComment: COMMENTS[getRandomInteger(0, COMMENTS.length - 1)],
-    emojiComment: EMOJI[getRandomInteger(0, EMOJI.length - 1)],
-    authorComment: NAMES_AUTHORS[getRandomInteger(0, NAMES_AUTHORS.length - 1)],
-    dateComment: commentDate(),
+  // const commentsUsers = () => ({
+  //   //генерация id коммента
+  //   idComment: nanoid(),
+  //   textComment: COMMENTS[getRandomInteger(0, COMMENTS.length - 1)],
+  //   emojiComment: EMOJI[getRandomInteger(0, EMOJI.length - 1)],
+  //   authorComment: NAMES_AUTHORS[getRandomInteger(0, NAMES_AUTHORS.length - 1)],
+  //   dateComment: commentDate(),
+  // });
+  const commentsUsersModel = () => ({
+    id: nanoid(),
+    author: NAMES_AUTHORS[getRandomInteger(0, NAMES_AUTHORS.length - 1)],
+    comment: COMMENTS[getRandomInteger(0, COMMENTS.length - 1)],
+    date: commentDate(),
+    emotion: EMOJI[getRandomInteger(0, EMOJI.length - 1)],
   });
-
-  const randomComments = new Array(getRandomInteger(0, 5)).fill(null).map(commentsUsers);
-  return randomComments;
+  // const randomComments = new Array(getRandomInteger(0, 5)).fill(null).map(commentsUsers);
+  // return randomComments;
+  return Array.from({length: getRandomInteger(0, 5)},commentsUsersModel);
 };
 
 
@@ -176,22 +197,68 @@ const generateGenre = () => {
   return Array.from(new Set(randomGenres));
 };
 
-export const generateFilmCardMock = () => ({
-  poster: generatePoster(),
-  title: generateTitle(),
-  director: generateDirector(),
-  writters: generateWritters(),
-  rating: `${(getRandomInteger(0, 9))}.${(getRandomInteger(0, 9))}`,
-  country: generateCountry(),
-  actor: generateActors(),
-  releaseDate: generateReleaseDate(),
-  ageRating: generateAgeRating(),
-  year: `${getRandomInteger(1900, 1980)}`,
-  runtime: `${getRandomInteger(0,3)}h ${getRandomInteger(0,60)}m`,
-  genre: generateGenre(),
-  description: generateDescription(),
+// export const generateFilmCardMock = () => ({
+//   poster: generatePoster(),
+//   title: generateTitle(),
+//   director: generateDirector(),
+//   writters: generateWritters(),
+//   rating: `${(getRandomInteger(0, 9))}.${(getRandomInteger(0, 9))}`,
+//   country: generateCountry(),
+//   actor: generateActors(),
+//   releaseDate: generateReleaseDate(),
+//   ageRating: generateAgeRating(),
+//   year: `${getRandomInteger(1900, 1980)}`,
+//   runtime: `${getRandomInteger(0,3)}h ${getRandomInteger(0,60)}m`,
+//   genre: generateGenre(),
+//   description: generateDescription(),
+//   comments: generateComments(),
+//   isAddWatchlist: Boolean(getRandomInteger(0, 1)),
+//   isAlreadyWatched: Boolean(getRandomInteger(0, 1)),
+//   isAddFavorites: Boolean(getRandomInteger(0, 1)),
+// });
+
+export const generateFilmModelMock = ()=> ({
+  id: nanoid(),
   comments: generateComments(),
-  isAddWatchlist: Boolean(getRandomInteger(0, 1)),
-  isAlreadyWatched: Boolean(getRandomInteger(0, 1)),
-  isAddFavorites: Boolean(getRandomInteger(0, 1)),
+  // [$Comment.id$, $Comment.id$]
+  filmInfo: {
+    title: generateTitle(),
+    // 'A Little Pony Without The Carpet',
+    alternativeTitle: generateTitle(),
+    // 'Laziness Who Sold Themselves'
+    totalRating: `${(getRandomInteger(0, 9))}.${(getRandomInteger(0, 9))}`,
+    // 5.3
+    poster: generatePoster(),
+    // 'images/posters/blue-blazes.jpg'
+    ageRating: generateAgeRating(),
+    // 0
+    director: generateDirector(),
+    // 'Tom Ford'
+    writers: generateWritters(),
+    // ['Takeshi Kitano']
+    actors: generateActors(),
+    // ['Morgan Freeman'],
+    release: {
+      date: generateReleaseDate(),
+      // '2019-05-11T00:00:00.000Z'
+      releaseCountry: generateCountry()
+      // 'Finland'
+    },
+    runtime: `${getRandomInteger(0,3)}h ${getRandomInteger(0,60)}m`,
+    // 77
+    genre: generateGenre(),
+    // ['Comedy'],
+    description: generateDescription(),
+    // 'Oscar-winning film, a war drama about two young people, from the creators of timeless classic \"Nu, Pogodi!\" and \"Alice in Wonderland\", with the best fight scenes since Bruce Lee.'
+  },
+  userDetails: {
+    watchlist: Boolean(getRandomInteger(0, 1)),
+    // false
+    alreadyWatched: Boolean(getRandomInteger(0, 1)),
+    // true
+    watchingDate: generateReleaseDate(),
+    // '2019-04-12T16:12:32.554Z'
+    favorite: Boolean(getRandomInteger(0, 1))
+    // false
+  }
 });
