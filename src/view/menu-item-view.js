@@ -6,12 +6,10 @@ const createFilter = (filter) => `<a href="#${filter.name}" class="main-navigati
 
 const createMenuItemTemplate = (filters) => {
   const currentFilters = filters.reduce((total, current) => total + createFilter(current), '');
-  return `<nav class="main-navigation">
-    <div class="main-navigation__items">
+  return `<div class="main-navigation__items">
       <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
         ${currentFilters}
-    </div>
-    </nav>`;
+    </div>`;
 };
 export default class MenuItemView {
   #element = null;

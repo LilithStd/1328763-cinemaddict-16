@@ -7,25 +7,57 @@ import {
 
 
 const createFilmPopupInfoTemplate = (film) => {
+  // const {
+  //   title,
+  //   poster,
+  //   rating,
+  //   ageRating,
+  //   director,
+  //   writters,
+  //   actor,
+  //   releaseDate,
+  //   country,
+  //   runtime,
+  //   description,
+  //   genre,
+  //   comments,
+  //   isAddWatchlist,
+  //   isAlreadyWatched,
+  //   isAddFavorites
+  // } = film;
+  const {
+    comments,
+    filmInfo,
+    userDetails
+  } = film;
   const {
     title,
-    poster,
-    rating,
-    ageRating,
+    alternativeTitle,
+    totalRating,
     director,
-    writters,
-    actor,
-    releaseDate,
-    country,
-    runtime,
+    actors,
+    writers,
+    ageRating,
+    poster,
     description,
+    release,
+    runtime,
     genre,
-    comments,
-    isAddWatchlist,
-    isAlreadyWatched,
-    isAddFavorites
-  } = film;
-
+  } = filmInfo;
+  const {
+    date,
+    releaseCountry
+  } = release;
+  const {
+    watchlist,
+    alreadyWatched,
+    favorite
+  } = userDetails;
+  // const {
+  //   author,
+  //   comment,
+  //   emotion
+  // } = comments;
   const checkCountGenre = () => {
     if (genre.length > 1) {
       return 'Genres';
@@ -47,13 +79,13 @@ const createFilmPopupInfoTemplate = (film) => {
     comments.forEach((element) => {
       const commentsItem = `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
-        <img src="./images/emoji/${element.emojiComment}.png" width="55" height="55" alt="emoji-${element.emojiComment}">
+        <img src="./images/emoji/${element.emotion}.png" width="55" height="55" alt="emoji-${element.emotion}">
       </span>
       <div>
-        <p class="film-details__comment-text">${element.textComment}</p>
+        <p class="film-details__comment-text">${element.comment}</p>
         <p class="film-details__comment-info">
-          <span class="film-details__comment-author">${element.authorComment}</span>
-          <span class="film-details__comment-day">${element.dateComment}</span>
+          <span class="film-details__comment-author">${element.author}</span>
+          <span class="film-details__comment-day">${element.date}</span>
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
@@ -73,7 +105,7 @@ const createFilmPopupInfoTemplate = (film) => {
     </div>
     <div class="film-details__info-wrap">
       <div class="film-details__poster">
-        <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
+        <img class="film-details__poster-img" src="${poster}" alt="${alternativeTitle}">
 
         <p class="film-details__age">${ageRating}</p>
       </div>
@@ -86,7 +118,7 @@ const createFilmPopupInfoTemplate = (film) => {
           </div>
 
           <div class="film-details__rating">
-            <p class="film-details__total-rating">${rating}</p>
+            <p class="film-details__total-rating">${totalRating}</p>
           </div>
         </div>
 
@@ -97,15 +129,15 @@ const createFilmPopupInfoTemplate = (film) => {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Writers</td>
-            <td class="film-details__cell">${writters}</td>
+            <td class="film-details__cell">${writers}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Actors</td>
-            <td class="film-details__cell">${actor}</td>
+            <td class="film-details__cell">${actors}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Release Date</td>
-            <td class="film-details__cell">${releaseDate}</td>
+            <td class="film-details__cell">${date}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Runtime</td>
@@ -113,7 +145,7 @@ const createFilmPopupInfoTemplate = (film) => {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Country</td>
-            <td class="film-details__cell">${country}</td>
+            <td class="film-details__cell">${releaseCountry}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">${checkCountGenre()}</td>
@@ -129,9 +161,9 @@ const createFilmPopupInfoTemplate = (film) => {
     </div>
 
     <section class="film-details__controls">
-      <button type="button" class="film-details__control-button ${addFilmStatusControls(isAddWatchlist,classControlPopup)} film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
-      <button type="button" class="film-details__control-button ${addFilmStatusControls(isAlreadyWatched,classControlPopup)} film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-      <button type="button" class="film-details__control-button ${addFilmStatusControls(isAddFavorites,classControlPopup)} film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+      <button type="button" class="film-details__control-button ${addFilmStatusControls(watchlist,classControlPopup)} film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
+      <button type="button" class="film-details__control-button ${addFilmStatusControls(alreadyWatched,classControlPopup)} film-details__control-button--watched" id="watched" name="watched">Already watched</button>
+      <button type="button" class="film-details__control-button ${addFilmStatusControls(favorite,classControlPopup)} film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
     </section>
   </div>
 

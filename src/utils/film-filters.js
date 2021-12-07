@@ -1,10 +1,10 @@
 const filmToFilterMap = {
   Watchlist: (films) => films
-    .filter((film) => film.isAddWatchlist).length,
+    .filter((film) => film.userDetails.watchlist).length,
   History: (films) => films
-    .filter((film) => film.isAlreadyWatched).length,
+    .filter((film) => film.userDetails.alreadyWatched).length,
   Favorites: (films) => films
-    .filter((film) => film.isAddFavorites).length,
+    .filter((film) => film.userDetails.favorite).length,
 };
 export const generateFilters = (films) => Object.entries(filmToFilterMap).map(
   ([filterName, countFilms]) => ({
