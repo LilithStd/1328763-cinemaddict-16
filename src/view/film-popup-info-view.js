@@ -1,30 +1,10 @@
 import {
   addFilmStatusControls
 } from '../utils/film-status-control.js';
-import {
-  createElement
-} from '../utils/render.js';
+import AbstractView from './abstract-view.js';
 
 
 const createFilmPopupInfoTemplate = (film) => {
-  // const {
-  //   title,
-  //   poster,
-  //   rating,
-  //   ageRating,
-  //   director,
-  //   writters,
-  //   actor,
-  //   releaseDate,
-  //   country,
-  //   runtime,
-  //   description,
-  //   genre,
-  //   comments,
-  //   isAddWatchlist,
-  //   isAlreadyWatched,
-  //   isAddFavorites
-  // } = film;
   const {
     comments,
     filmInfo,
@@ -53,11 +33,7 @@ const createFilmPopupInfoTemplate = (film) => {
     alreadyWatched,
     favorite
   } = userDetails;
-  // const {
-  //   author,
-  //   comment,
-  //   emotion
-  // } = comments;
+
   const checkCountGenre = () => {
     if (genre.length > 1) {
       return 'Genres';
@@ -212,27 +188,15 @@ const createFilmPopupInfoTemplate = (film) => {
 </section>
   `;
 };
-export default class FilmPopupInfoView {
-  #element = null;
+export default class FilmPopupInfoView extends AbstractView{
   #film = null;
 
   constructor(film) {
+    super();
     this.#film = film;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createFilmPopupInfoTemplate(this.#film);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
