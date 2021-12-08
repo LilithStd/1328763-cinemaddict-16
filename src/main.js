@@ -46,10 +46,6 @@ const bodyElement = document.querySelector('body');
 const renderFilm = (filmContainer, film) => {
   const filmCardComponent = new FilmCardView(film);
   const filmCardInformationComponent = new FilmPopupInfoView(film);
-  const filmCardPreviewPoster = filmCardComponent.element.querySelector('.film-card__poster');
-  const filmCardPreviewTitle = filmCardComponent.element.querySelector('.film-card__title');
-  const filmCardPreviewComments = filmCardComponent.element.querySelector('.film-card__comments');
-  const filmCardInformationElement = filmCardInformationComponent.element.querySelector('.film-details__close-btn');
 
   const escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
@@ -70,15 +66,14 @@ const renderFilm = (filmContainer, film) => {
     document.addEventListener('keydown', escKeyDownHandler);
   };
 
-  filmCardPreviewPoster.addEventListener('click', popUpOpenClickHandler);
-  filmCardPreviewTitle.addEventListener('click', popUpOpenClickHandler);
-  filmCardPreviewComments.addEventListener('click', popUpOpenClickHandler);
+  filmCardComponent.setFilmClickHandler(popUpOpenClickHandler);
 
-  filmCardInformationElement.addEventListener('click', () => {
+  filmCardInformationComponent.setFilmPopupCloseClickHandler(() => {
     bodyElement.removeChild(filmCardInformationComponent.element);
     bodyElement.classList.remove('hide-overflow');
     document.removeEventListener('keydown', escKeyDownHandler);
   });
+
   render(filmContainer, filmCardComponent.element, RenderPosition.BEFOREEND);
 };
 
@@ -146,8 +141,7 @@ if (films.length === 0) {
     render(filmsListElement, loadMoreButton.element, RenderPosition.BEFOREEND);
 
 
-    loadMoreButton.element.addEventListener('click', (evt) => {
-      evt.preventDefault();
+    loadMoreButton.setClickHandler(() => {
       films
         .slice(renderedFilmCount, renderedFilmCount + FILM_COUNT_PER_STEP)
         .forEach((film) => renderFilm(filmsListContainerElement, film));
