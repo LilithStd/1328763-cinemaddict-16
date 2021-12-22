@@ -4,7 +4,8 @@ import FilmListView from '../view/film-list-view.js';
 import FilmContainerView from '../view/film-container-view.js';
 import FilmListEmptyView from '../view/film-list-empty-view.js';
 import UserRankView from '../view/user-rank-view.js';
-import FilmExtraView from '../view/film-extra-container-view.js';
+import FilmExtraMostCommentedView from '../view/film-extra-most-commented.js';
+import FilmExtraTopRatedView from '../view/film-extra-top-rated.js';
 import FilmCardView from '../view/film-card-view.js';
 import FilmPopupInfoView from '../view/film-popup-info-view.js';
 import ButtonShowMoreView from '../view/button-show-more-view.js';
@@ -16,8 +17,6 @@ import {
 
 const FILM_COUNT_PER_STEP = 5;
 const FILM_EXTRA_COUNT = 2;
-const MOST_COMMENTED = 'Most commented';
-const TOP_RATED = 'Top rated';
 
 export default class MoviePresenter {
   #filmsBoardContainer = null;
@@ -27,7 +26,8 @@ export default class MoviePresenter {
   #filmContainerComponent = new FilmContainerView();
   #sortComponent = new SortView();
   #filmsListEmptyComponent = new FilmListEmptyView();
-  // #filmsExtraComponent = new filmExtraView();
+  #filmExtraMostCommentedComponent = new FilmExtraMostCommentedView();
+  #filmExtraTopRatedComponent = new FilmExtraTopRatedView();
   #filmCardComponent = new FilmCardView();
   #userRankComponent = new UserRankView();
   #loadMoreButton = new ButtonShowMoreView();
@@ -49,16 +49,15 @@ export default class MoviePresenter {
 
   #renderUserRank = () => {
     //Метод для рендеринга Ранга пользователя в хедере
-
+    const headerElement = document.querySelector('.header');
+    render(headerElement, this.#userRankComponent, RenderPosition.BEFOREEND);
   }
 
   #renderSort = () => {
     // Метод для рендеринга сортировки
   }
 
-  #renderFilm = (film) => {
-    // Метод, куда уйдёт логика созданию и рендерингу компонетов задачи,
-    // текущая функция renderTask в main.js
+  #renderFilm = (container, film) => {
     const filmCardComponent = new FilmCardView(film);
     const filmCardInformationComponent = new FilmPopupInfoView(film);
     const bodyElement = document.querySelector('body');
@@ -90,7 +89,7 @@ export default class MoviePresenter {
       document.removeEventListener('keydown', escKeyDownHandler);
     });
 
-    render(this.#filmContainerComponent, filmCardComponent, RenderPosition.BEFOREEND);
+    render(container, filmCardComponent, RenderPosition.BEFOREEND);
   }
 
   #renderFilmsList = () =>  {
@@ -102,33 +101,30 @@ export default class MoviePresenter {
   }
 
   #renderFilms = (from, to) => {
-    // Метод для рендеринга N-задач за раз
     this.#films
       .slice(from, to)
-      .forEach((film) => this.#renderFilm(film));
+      .forEach((film) => this.#renderFilm(this.#filmContainerComponent, film));
+  }
+
+  #renderFilmListExtra = () => {
+    render(this.#filmsBoardComponent, this.#filmExtraTopRatedComponent, RenderPosition.BEFOREEND);
+    render(this.#filmsBoardComponent, this.#filmExtraMostCommentedComponent, RenderPosition.BEFOREEND);
   }
 
   #renderFilmExtra = () => {
-    const topRatedElement = new FilmExtraView(TOP_RATED);
-    const mostCommentedElement = new FilmExtraView(MOST_COMMENTED);
+    this.#renderFilmListExtra();
+    const topRatedContainer = this.#filmExtraTopRatedComponent.element.querySelector('.films-list__container');
+    const mostCommentedContainer = this.#filmExtraMostCommentedComponent.element.querySelector('.films-list__container');
 
-    render(this.#filmsBoardComponent, topRatedElement, RenderPosition.BEFOREEND);
-    render(this.#filmsBoardComponent, mostCommentedElement, RenderPosition.BEFOREEND);
-
-    const filmTopRatedContainer = topRatedElement.element.querySelector('.films-list--extra .films-list__container');
-    const filmMostCommentedContainer = mostCommentedElement.element.querySelector('.films-list--extra .films-list__container');
     const topRatedResult = this.#films.slice().sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
     const mostCommentedResult = this.#films.slice().sort((a, b) => b.comments.length - a.comments.length);
-    console.log(topRatedResult[0]);
     for (let i = 0; i < FILM_EXTRA_COUNT; i++) {
-      render(filmTopRatedContainer, topRatedResult[i], RenderPosition.BEFOREEND);
-      render(filmMostCommentedContainer, mostCommentedResult[i], RenderPosition.BEFOREEND);
+      this.#renderFilm(topRatedContainer, topRatedResult[i]);
+      this.#renderFilm(mostCommentedContainer, mostCommentedResult[i]);
     }
-
   };
 
   #renderNoFilms = () => {
-    // Метод для рендеринга заглушки
     render(this.#filmsBoardComponent, this.#filmsListEmptyComponent, RenderPosition.BEFOREEND);
   }
 
@@ -141,8 +137,6 @@ export default class MoviePresenter {
   }
 
   #renderLoadMoreButton = () => {
-    // Метод, куда уйдёт логика по отрисовке кнопки допоказа задач,
-    // сейчас в main.js является частью renderBoard
     let renderedFilmCount = FILM_COUNT_PER_STEP;
 
     const loadMoreButton = new ButtonShowMoreView();
@@ -152,7 +146,7 @@ export default class MoviePresenter {
     loadMoreButton.setClickHandler(() => {
       this.#films
         .slice(renderedFilmCount, renderedFilmCount + FILM_COUNT_PER_STEP)
-        .forEach((film) => this.#renderFilm(film));
+        .forEach((film) => this.#renderFilm(this.#filmContainerComponent, film));
       renderedFilmCount += FILM_COUNT_PER_STEP;
 
       if (renderedFilmCount >= this.#films.length) {
@@ -163,8 +157,6 @@ export default class MoviePresenter {
   }
 
   #renderFilmsBoard = () => {
-    // Метод для инициализации (начала работы) модуля,
-    // бОльшая часть текущей функции renderBoard в main.js
     if (this.#films.length === 0) {
       this.#renderNoFilms();
       return;
