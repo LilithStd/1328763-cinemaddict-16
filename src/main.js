@@ -6,7 +6,7 @@ import MenuContainerView from './view/menu-container-view.js';
 import MenuItemView from './view/menu-item-view.js';
 import FooterStatisticsView from './view/footer-statistics-view.js';
 import MenuStatsView from './view/menu-stats-view.js';
-import MoviePresenter from './presenter/movie-presenter.js';
+import FilmBoardPresenter from './presenter/film-board-presenter.js';
 import {
   generateFilmModelMock
 } from './mock/film-card-mock.js';
@@ -35,12 +35,12 @@ const renderMenu = (menuContainer) => {
 
 };
 
-const moviePresenter = new MoviePresenter(mainElement);
+const filmBoardPresenter = new FilmBoardPresenter(mainElement);
 
 render(footerStatisticsElement, new FooterStatisticsView(films), RenderPosition.BEFOREEND);
 
 renderMenu(mainElement);
 
 
-moviePresenter.init(films);
+filmBoardPresenter.init(films);
 
