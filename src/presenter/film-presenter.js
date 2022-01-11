@@ -19,6 +19,7 @@ export default class FilmPresenter {
   #filmCardComponent = null;
   #filmPopupComponent = null;
 
+  #id = null;
   #film = null;
   #mode = Mode.DEFAULT
 
@@ -30,6 +31,7 @@ export default class FilmPresenter {
 
   init = (container, film) => {
     this.#film = film;
+    // this.#getIdFilms();
 
     const prevFilmComponent = this.#filmCardComponent;
     const prevFilmPopupComponent = this.#filmPopupComponent;
@@ -66,6 +68,10 @@ export default class FilmPresenter {
 
   }
 
+  // get id() {
+  //   this.#id = this.#film.id;
+  //   return this.#id;
+  // }
 
   #handleFavoriteClick = () => {
     this.#changeData(this.#filmCardContainerComponent, {...this.#film, userDetails: {...this.#film.userDetails, favorite: !this.#film.userDetails.favorite}});
@@ -92,13 +98,14 @@ export default class FilmPresenter {
     bodyElement.classList.remove('hide-overflow');
     document.removeEventListener('keydown', this.#onEscKeyDown);
     remove(this.#filmPopupComponent);
+    // this.#changeMode();
     this.#mode = Mode.DEFAULT;
   }
 
   #openFilmPopUp = () => {
-    // if (this.#mode !== Mode.DEFAULT) {
-    //   this.#closeFilmPopUp();
-    // }
+    if (this.#mode !== Mode.DEFAULT) {
+      this.#closeFilmPopUp();
+    }
     this.#changeMode();
     this.#mode = Mode.POPUPOPEN;
     // this.#filmPopupComponent = new FilmPopupInfoView(this.#film);
@@ -112,6 +119,11 @@ export default class FilmPresenter {
     // this.#filmPopupComponent.setFilmPopupControlWatchlistClickHandler(this.#handleWatchlistClick);
     // this.#filmPopupComponent.setFilmPopupControlFavoriteClickHandler(this.#handleFavoriteClick);
   }
+
+  // #getIdFilms = () => {
+  //   this.#id = this.#film.id;
+  //   return this.#id;
+  // }
 
   resetView = () => {
     if (this.#mode !== Mode.DEFAULT) {
