@@ -73,19 +73,11 @@ export default class FilmBoardPresenter {
   #handleFilmChange = (container, updatedFilm) => {
     this.#films = updateItem(this.#films, updatedFilm);
 
-    if(this.#filmTopRatedPresenter.has(updatedFilm.id) && this.#filmPresenter.has(updatedFilm.id)) {
-      this.#filmTopRatedPresenter.get(updatedFilm.id).init(container, updatedFilm);
-      this.#filmPresenter.get(updatedFilm.id).init(container, updatedFilm);
-    }
-    if(this.#filmTopRatedPresenter.has(updatedFilm.id) && !this.#filmPresenter.has(updatedFilm.id)) {
+    if(this.#filmTopRatedPresenter.has(updatedFilm.id)) {
       this.#filmTopRatedPresenter.get(updatedFilm.id).init(container, updatedFilm);
     }
 
-    if(this.#filmMostCommentedPresenter.has(updatedFilm.id) && this.#filmPresenter.has(updatedFilm.id)) {
-      this.#filmMostCommentedPresenter.get(updatedFilm.id).init(container, updatedFilm);
-      this.#filmPresenter.get(updatedFilm.id).init(container, updatedFilm);
-    }
-    if(this.#filmMostCommentedPresenter.has(updatedFilm.id) && !this.#filmPresenter.has(updatedFilm.id)) {
+    if(this.#filmMostCommentedPresenter.has(updatedFilm.id)) {
       this.#filmMostCommentedPresenter.get(updatedFilm.id).init(container, updatedFilm);
     }
 

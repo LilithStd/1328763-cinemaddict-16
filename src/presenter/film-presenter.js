@@ -43,6 +43,11 @@ export default class FilmPresenter {
     this.#filmCardComponent.setFilmControlWatchlistClickHandler(this.#handleWatchlistClick);
     this.#filmCardComponent.setFilmControlFavoriteClickHandler(this.#handleFavoriteClick);
 
+    this.#filmPopupComponent.setFilmPopupCloseClickHandler(this.#closeFilmPopUp);
+    this.#filmPopupComponent.setFilmPopupControlAlreadyWatchedClickHandler(this.#handleAlreadyWatchedClick);
+    this.#filmPopupComponent.setFilmPopupControlWatchlistClickHandler(this.#handleWatchlistClick);
+    this.#filmPopupComponent.setFilmPopupControlFavoriteClickHandler(this.#handleFavoriteClick);
+
     if (prevFilmComponent === null || prevFilmPopupComponent === null) {
       render(this.#filmCardContainerComponent, this.#filmCardComponent, RenderPosition.BEFOREEND);
       return;
@@ -52,6 +57,7 @@ export default class FilmPresenter {
     }
     if (this.#mode === Mode.POPUPOPEN) {
       replace(this.#filmPopupComponent, prevFilmPopupComponent);
+      replace(this.#filmCardComponent, prevFilmComponent);
     }
 
 
@@ -96,10 +102,6 @@ export default class FilmPresenter {
     render(bodyElement, this.#filmPopupComponent, RenderPosition.BEFOREEND);
     document.addEventListener('keydown', this.#onEscKeyDown);
 
-    this.#filmPopupComponent.setFilmPopupCloseClickHandler(this.#closeFilmPopUp);
-    this.#filmPopupComponent.setFilmPopupControlAlreadyWatchedClickHandler(this.#handleAlreadyWatchedClick);
-    this.#filmPopupComponent.setFilmPopupControlWatchlistClickHandler(this.#handleWatchlistClick);
-    this.#filmPopupComponent.setFilmPopupControlFavoriteClickHandler(this.#handleFavoriteClick);
   }
 
   resetView = () => {
