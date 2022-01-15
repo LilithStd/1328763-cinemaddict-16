@@ -174,8 +174,8 @@ export default class FilmBoardPresenter {
     const topRatedContainer = this.#filmExtraTopRatedComponent.element.querySelector('.films-list__container');
     const mostCommentedContainer = this.#filmExtraMostCommentedComponent.element.querySelector('.films-list__container');
 
-    const topRatedResult = this.#films.slice().sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
-    const mostCommentedResult = this.#films.slice().sort((a, b) => b.comments.length - a.comments.length);
+    const topRatedResult = this.#sourcedFilms.slice().sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
+    const mostCommentedResult = this.#sourcedFilms.slice().sort((a, b) => b.comments.length - a.comments.length);
     this.#renderFilms(0, this.#filmExtraCount,this.#filmTopRatedPresenter, topRatedContainer, topRatedResult);
     this.#renderFilms(0, this.#filmExtraCount,this.#filmMostCommentedPresenter, mostCommentedContainer, mostCommentedResult);
   };
