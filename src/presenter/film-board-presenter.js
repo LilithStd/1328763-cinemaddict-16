@@ -140,6 +140,10 @@ export default class FilmBoardPresenter {
   #clearFilmsList = () => {
     this.#filmPresenter.forEach((film) => film.destroy());
     this.#filmPresenter.clear();
+    this.#filmTopRatedPresenter.forEach((film) => film.destroy());
+    this.#filmTopRatedPresenter.clear();
+    this.#filmMostCommentedPresenter.forEach((film) => film.destroy());
+    this.#filmMostCommentedPresenter.clear();
     this.#renderedFilmCount = FILM_COUNT_PER_STEP;
     remove(this.#loadMoreButtonComponent);
   }
