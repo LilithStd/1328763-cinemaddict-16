@@ -16,6 +16,13 @@ import {
 import {
   updateItem
 } from '../utils/common.js';
+import {
+  SortType
+} from '../const.js';
+import {
+  sortByRating,
+  sortByDate
+} from '../utils/sort.js';
 
 const FILM_COUNT_PER_STEP = 5;
 const FILM_EXTRA_COUNT = 2;
@@ -40,6 +47,8 @@ export default class FilmBoardPresenter {
   #filmPresenter = new Map;
   #filmTopRatedPresenter = new Map;
   #filmMostCommentedPresenter = new Map;
+  #currentSortType = SortType.DEFAULT;
+  #sourcedFilms = [];
 
   constructor(filmsBoardContainer) {
     this.#filmsBoardContainer = filmsBoardContainer;
@@ -47,6 +56,7 @@ export default class FilmBoardPresenter {
 
   init = (film) => {
     this.#films = [...film];
+    this.#sourcedFilms = [...film];
 
     render(this.#filmsBoardContainer, this.#filmsBoardComponent, RenderPosition.BEFOREEND);
 
@@ -61,7 +71,40 @@ export default class FilmBoardPresenter {
 
   #renderSort = () => {
     // Метод для рендеринга сортировки
+    if (this.#films.length === 0) {
+      return;
+    }
     render(this.#filmsBoardComponent,this.#sortComponent, RenderPosition.BEFOREBEGIN);
+    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
+  }
+
+  #sortFilms = (sortType) => {
+
+    switch (sortType) {
+      case SortType.DATE:
+        sortByDate(this.#films);
+        break;
+      case SortType.RATING:
+        sortByRating(this.#films);
+        break;
+      default:
+        this.#films = [...this.#sourcedFilms];
+    }
+
+    this.#currentSortType = sortType;
+  }
+
+  #handleSortTypeChange = (sortType) => {
+    // - Сортируем задачи
+    // - Очищаем список
+    // - Рендерим список заново
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#sortFilms(sortType);
+    this.#clearFilmsList();
+    this.#renderFilmsBoard();
   }
 
   #handleModeChange = () => {
@@ -72,6 +115,7 @@ export default class FilmBoardPresenter {
 
   #handleFilmChange = (container, updatedFilm) => {
     this.#films = updateItem(this.#films, updatedFilm);
+    this.#sourcedFilms = updateItem(this.#sourcedFilms, updatedFilm);
 
     if(this.#filmTopRatedPresenter.has(updatedFilm.id)) {
       this.#filmTopRatedPresenter.get(updatedFilm.id).init(container, updatedFilm);
@@ -95,7 +139,7 @@ export default class FilmBoardPresenter {
 
   #clearFilmsList = () => {
     this.#filmPresenter.forEach((film) => film.destroy());
-    this.#renderedFilmCount.clear();
+    this.#filmPresenter.clear();
     this.#renderedFilmCount = FILM_COUNT_PER_STEP;
     remove(this.#loadMoreButtonComponent);
   }
@@ -168,6 +212,5 @@ export default class FilmBoardPresenter {
     this.#renderFilmContainer();
     this.#renderFilmsListMore();
     this.#renderFilmListExtra();
-
   }
 }
