@@ -47,6 +47,7 @@ export default class FilmPresenter {
     this.#filmPopupComponent.setFilmPopupControlAlreadyWatchedClickHandler(this.#handleAlreadyWatchedClick);
     this.#filmPopupComponent.setFilmPopupControlWatchlistClickHandler(this.#handleWatchlistClick);
     this.#filmPopupComponent.setFilmPopupControlFavoriteClickHandler(this.#handleFavoriteClick);
+    this.#filmPopupComponent.setFilmPopupFormSubmitHandler(this.#handleFormSubmit);
 
     if (prevFilmComponent === null || prevFilmPopupComponent === null) {
       render(this.#filmCardContainerComponent, this.#filmCardComponent, RenderPosition.BEFOREEND);
@@ -80,13 +81,22 @@ export default class FilmPresenter {
   #onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      // this.#filmPopupComponent.reset(this.#film);
       this.#closeFilmPopUp();
     }
   }
 
+  // #ctrlEnterKeyDownHandler = (evt) => {
+  //   if (evt.keyCode === 17 && evt.keyCode === 13) {
+  //     evt.preventDefault();
+  //     console.log(123);
+  //   }
+  // };
+
   #closeFilmPopUp = () => {
     bodyElement.classList.remove('hide-overflow');
     document.removeEventListener('keydown', this.#onEscKeyDown);
+    this.#filmPopupComponent.reset(this.#film);
     this.#filmPopupComponent.element.remove();
     this.#mode = Mode.DEFAULT;
   }
@@ -101,7 +111,12 @@ export default class FilmPresenter {
     bodyElement.classList.add('hide-overflow');
     render(bodyElement, this.#filmPopupComponent, RenderPosition.BEFOREEND);
     document.addEventListener('keydown', this.#onEscKeyDown);
+    // document.addEventListener('keydown', this.#ctrlEnterKeyDownHandler);
 
+  }
+
+  #handleFormSubmit = () => {
+    this.#changeData(this.#filmCardContainerComponent, this.#film);
   }
 
   resetView = () => {
