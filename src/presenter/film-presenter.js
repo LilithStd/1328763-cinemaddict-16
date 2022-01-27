@@ -30,11 +30,10 @@ export default class FilmPresenter {
     this.#film = film;
 
     const prevFilmComponent = this.#filmCardComponent;
-    const prevFilmPopupComponent = this.#filmPopupComponent;
 
     this.#filmCardContainerComponent = container;
     this.#filmCardComponent = new FilmCardView(this.#film);
-    this.#filmPopupComponent = new FilmPopupInfoView(this.#film);
+    // this.#filmPopupComponent = new FilmPopupInfoView(this.#film);
 
 
     this.#filmCardComponent.setFilmClickHandler(this.#openFilmPopUp);
@@ -43,12 +42,7 @@ export default class FilmPresenter {
     this.#filmCardComponent.setFilmControlWatchlistClickHandler(this.#handleWatchlistClick);
     this.#filmCardComponent.setFilmControlFavoriteClickHandler(this.#handleFavoriteClick);
 
-    this.#filmPopupComponent.setFilmPopupCloseClickHandler(this.#closeFilmPopUp);
-    this.#filmPopupComponent.setFilmPopupControlAlreadyWatchedClickHandler(this.#handleAlreadyWatchedClick);
-    this.#filmPopupComponent.setFilmPopupControlWatchlistClickHandler(this.#handleWatchlistClick);
-    this.#filmPopupComponent.setFilmPopupControlFavoriteClickHandler(this.#handleFavoriteClick);
-
-    if (prevFilmComponent === null || prevFilmPopupComponent === null) {
+    if (prevFilmComponent === null) {
       render(this.#filmCardContainerComponent, this.#filmCardComponent, RenderPosition.BEFOREEND);
       return;
     }
@@ -56,7 +50,7 @@ export default class FilmPresenter {
       replace(this.#filmCardComponent, prevFilmComponent);
     }
     if (this.#mode === Mode.POPUPOPEN) {
-      replace(this.#filmPopupComponent, prevFilmPopupComponent);
+      // replace(this.#filmPopupComponent, prevFilmPopupComponent);
       replace(this.#filmCardComponent, prevFilmComponent);
     }
 
@@ -80,15 +74,25 @@ export default class FilmPresenter {
   #onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      // this.#filmPopupComponent.reset(this.#film);
       this.#closeFilmPopUp();
     }
   }
 
+  // #ctrlEnterKeyDownHandler = (evt) => {
+  //   if (evt.keyCode === 17 && evt.keyCode === 13) {
+  //     evt.preventDefault();
+  //     console.log(123);
+  //   }
+  // };
+
   #closeFilmPopUp = () => {
     bodyElement.classList.remove('hide-overflow');
     document.removeEventListener('keydown', this.#onEscKeyDown);
+    // this.#filmPopupComponent.reset(this.#film);
     this.#filmPopupComponent.element.remove();
     this.#mode = Mode.DEFAULT;
+    this.#filmPopupComponent = null;
   }
 
   #openFilmPopUp = () => {
@@ -99,9 +103,18 @@ export default class FilmPresenter {
     this.#mode = Mode.POPUPOPEN;
 
     bodyElement.classList.add('hide-overflow');
+    this.#filmPopupComponent = new FilmPopupInfoView(this.#film);
+    this.#filmPopupComponent.setFilmPopupCloseClickHandler(this.#closeFilmPopUp);
+    this.#filmPopupComponent.setFilmPopupControlAlreadyWatchedClickHandler(this.#handleAlreadyWatchedClick);
+    this.#filmPopupComponent.setFilmPopupControlWatchlistClickHandler(this.#handleWatchlistClick);
+    this.#filmPopupComponent.setFilmPopupControlFavoriteClickHandler(this.#handleFavoriteClick);
     render(bodyElement, this.#filmPopupComponent, RenderPosition.BEFOREEND);
     document.addEventListener('keydown', this.#onEscKeyDown);
 
+  }
+
+  #handleFormSubmit = () => {
+    this.#changeData(this.#filmCardContainerComponent, this.#film);
   }
 
   resetView = () => {

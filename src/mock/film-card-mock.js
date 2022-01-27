@@ -244,7 +244,8 @@ export const generateFilmModelMock = ()=> ({
       releaseCountry: generateCountry()
       // 'Finland'
     },
-    runtime: `${getRandomInteger(0,3)}h ${getRandomInteger(0,60)}m`,
+    runtime: getRandomInteger(0,180),
+    // runtime: `${getRandomInteger(0,3)}h ${getRandomInteger(0,60)}m`,
     // 77
     genre: generateGenre(),
     // ['Comedy'],
