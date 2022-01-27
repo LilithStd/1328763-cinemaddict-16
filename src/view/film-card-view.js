@@ -3,6 +3,7 @@ import {
 } from '../utils/film-status-control.js';
 import dayjs from 'dayjs';
 import AbstractView from './abstract-view.js';
+import {formatDurationFilm} from '../utils/date.js';
 
 const createFilmCardtemplate = (film) => {
   const {
@@ -46,7 +47,7 @@ const createFilmCardtemplate = (film) => {
     <p class="film-card__rating">${totalRating}</p>
     <p class="film-card__info">
       <span class="film-card__year">${year}</span>
-      <span class="film-card__duration">${runtime}</span>
+      <span class="film-card__duration">${formatDurationFilm(runtime)}</span>
       <span class="film-card__genre">${genre[0]}</span>
     </p>
     <img src="${poster}" alt="${alternativeTitle}" class="film-card__poster">

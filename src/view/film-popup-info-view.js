@@ -4,6 +4,8 @@ import {
 // import AbstractView from './abstract-view.js';
 import SmartView from './smart-view.js';
 import {EMOJI} from '../const.js';
+// import dayjs from 'dayjs';
+import {formatDurationFilm} from '../utils/date.js';
 
 
 const createFilmPopupInfoTemplate = (film) => {
@@ -38,6 +40,13 @@ const createFilmPopupInfoTemplate = (film) => {
     favorite
   } = userDetails;
   // console.log(comments.emotion);
+
+  // const runtimeDateFormat = (runtimeFilm)  => {
+  //   if (runtimeFilm < 60) {
+  //     return `${dayjs.duration(runtimeFilm, 'm').format('mm[m]')}`;
+  //   }
+  //   return `${dayjs.duration(runtimeFilm, 'm').format('H[h] mm[m]')}`;
+  // };
 
   const checkCountGenre = () => {
     if (genre.length > 1) {
@@ -153,7 +162,7 @@ const createFilmPopupInfoTemplate = (film) => {
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Runtime</td>
-            <td class="film-details__cell">${runtime}</td>
+            <td class="film-details__cell">${formatDurationFilm(runtime)}</td>
           </tr>
           <tr class="film-details__row">
             <td class="film-details__term">Country</td>
@@ -251,16 +260,19 @@ export default class FilmPopupInfoView extends SmartView{
   #popupFavoriteClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.favoriteClick();
+    this.updateData({userDetails: {...this._data.userDetails, favorite: !this._data.userDetails.favorite}});
   }
 
   #popupAlreadyWatchedClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.alreadyWatchedClick();
+    this.updateData({userDetails: {...this._data.userDetails, alreadyWatched: !this._data.userDetails.alreadyWatched}});
   }
 
   #popupWatchListClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.watchlistClick();
+    this.updateData({userDetails: {...this._data.userDetails, watchlist: !this._data.userDetails.watchlist}});
   }
 
   #filmPopupCloseClickHandler = (evt) => {
@@ -315,6 +327,7 @@ export default class FilmPopupInfoView extends SmartView{
       FilmPopupInfoView.parseFilmToData(film),
     );
   }
+
 
   static parseFilmToData = (film) => ({...film,
     commentEmotion: film.commentEmotion !== undefined,
